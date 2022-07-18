@@ -1,0 +1,39 @@
+- name: api
+  groups:
+    - name: get_contents
+      errors:
+        - name: not_found
+          key: /contents/:ContentId/ngwords.404
+          message: None of the content could be retrieved.
+          description: None of the content could be retrieved.
+          url: http://example.com/#/contents/GetContents
+        - name: invalid_query
+          message: The query required to retrieve the content has not been specified.
+          description: The query required to retrieve the content has not been specified.
+          url: http://example.com/#/contents/GetContents
+    - name: post_contents
+      errors:
+        - name: invalid_request
+          message: There is an error in the parameters for content registration.
+          description: There is an error in the parameters for content registration.
+          url: http://example.com/#/contents/PostContents
+        - name: duplicated_error
+          message: An error occurred with duplicate content registration.
+          description: An error occurred with duplicate content registration.
+          url: http://example.com/#/contents/PostContents
+
+- name: db
+  errors:
+    - name: connection_refused
+      message: Database connection could not be established
+      description: Database connection could not be established
+      metadata:
+        status_code: "502"
+  groups:
+    - name: contents
+      errors:
+        - name: table_does_not_exists
+          message: Contents table does not exist
+          description: Contents table does not exist
+          metadata:
+            status_code: "404"
