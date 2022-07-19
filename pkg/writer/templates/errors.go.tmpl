@@ -2,19 +2,19 @@
 
 package {{ .Package }}
 
-type generr struct {
+type Error struct {
   error
-  Code  generrcode  `json:"name"`
+  Code  errorCode  `json:"name"`
   Msg   string  `json:"message"`
   Url   string  `json:"url,omitempty"`
   Meta  map[string]string `json:"metadata"`
 }
 
-func (e *generr) Error() string {
+func (e *Error) Error() string {
   return e.Msg
 }
 
-func FindByKey(key string) *generr {
+func FindByKey(key string) *Error {
   switch key {
   {{- range .ErrorWithCodes }}
   {{- if .Error.Key }}
@@ -27,14 +27,14 @@ func FindByKey(key string) *generr {
   return nil
 }
 
-type generrcode int
+type errorCode int
 
 const (
   {{- range .ErrorWithCodes }}
   {{- if .Error.Desc }}
   // {{ .Error.Desc }}
   {{- end }}
-  {{ .Code.NameWithCode }} generrcode = {{ .Code.ErrorNum }}
+  {{ .Code.NameWithCode }} errorCode = {{ .Code.ErrorNum }}
   {{ end }}
 )
 
@@ -54,7 +54,7 @@ var (
   //
   // Reference: {{ .Error.Url }}
   {{- end }}
-  {{ .Code.Name }} = &generr{
+  {{ .Code.Name }} = &Error{
     Code: {{ .Code.NameWithCode }},
     {{- if .Error.Msg }}
     Msg: "{{ .Error.Msg }}",
